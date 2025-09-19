@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "builtin",
+      "name": "fs",
+      "options": {
+        "allowed_directories": ["${env://WORK_DIR:-/tmp}"]
+      },
+      "allowedTools": ["read_file", "list_directory"]
+    },
+    "filesystem-cwd": {
+      "type": "builtin",
+      "name": "fs"
+    }
+  }
+}

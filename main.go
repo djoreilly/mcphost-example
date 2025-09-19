@@ -14,6 +14,7 @@ func main() {
 	options := sdk.Options{
 		Model:      "ollama:qwen2.5:3b",
 		ConfigFile: "config.json",
+		Streaming:  true,
 	}
 	host, err := sdk.New(ctx, &options)
 	if err != nil {
@@ -21,10 +22,27 @@ func main() {
 	}
 	defer host.Close()
 
-	response, err := host.Prompt(ctx, "what files are in the current directory?")
+	// response, err := host.Prompt(ctx, "what files are in the current directory?")
+	response, err := host.PromptWithCallbacks(
+		ctx,
+		"what files are in the current directory?",
+		func(name, args string) {
+			fmt.Printf("Calling tool: %s with args: %s\n", name, args)
+		},
+		func(name, args, result string, isError bool) {
+			if isError {
+				fmt.Printf("Tool %s failed\n", name)
+			} else {
+				fmt.Printf("Tool %s ran successfully\n", name)
+			}
+		},
+		func(chunk string) {
+			fmt.Print(chunk)
+		})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println(response)
+	_ = response
+	// fmt.Printf("Final response: %s\n", response)
 }

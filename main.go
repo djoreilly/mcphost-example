@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 
@@ -39,7 +40,9 @@ func main() {
 			if isError {
 				fmt.Printf("Tool %s failed\n", name)
 			} else {
-				fmt.Printf("Tool %s ran successfully\n", name)
+				if !errors.Is(ctx.Err(), context.Canceled) {
+					fmt.Printf("Tool %s ran successfully\n", name)
+				}
 			}
 		},
 		func(chunk string) {
@@ -50,5 +53,6 @@ func main() {
 	}
 
 	_ = response
+	fmt.Println()
 	// fmt.Printf("Final response: %s\n", response)
 }

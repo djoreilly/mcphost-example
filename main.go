@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
 
 	options := sdk.Options{
 		Model:      "ollama:qwen2.5:3b",
@@ -27,7 +27,13 @@ func main() {
 		ctx,
 		"what files are in the current directory?",
 		func(name, args string) {
-			fmt.Printf("Calling tool: %s with args: %s\n", name, args)
+			fmt.Printf("Run tool: %s with args: %s\n", name, args)
+			fmt.Print("Are you sure? [y/n]")
+			var answer string
+			fmt.Scan(&answer)
+			if answer != "y" {
+				cancel()
+			}
 		},
 		func(name, args, result string, isError bool) {
 			if isError {

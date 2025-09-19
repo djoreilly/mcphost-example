@@ -4,13 +4,9 @@
       "type": "builtin",
       "name": "fs",
       "options": {
-        "allowed_directories": ["${env://WORK_DIR:-/tmp}"]
+        "allowed_directories": ["${env://PWD:-/tmp}"]
       },
       "allowedTools": ["read_file", "list_directory"]
-    },
-    "filesystem-cwd": {
-      "type": "builtin",
-      "name": "fs"
     }
   }
 }

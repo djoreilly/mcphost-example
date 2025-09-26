@@ -57,6 +57,8 @@ func recvMessage(scanner *bufio.Scanner) (Message, error) {
 	err := json.Unmarshal(b, &msg)
 	if err == nil {
 		slog.Debug("received from stdin", "Message", msg)
+	} else {
+		slog.Warn("failed to decode json", "bytes", b)
 	}
 	return msg, err
 }

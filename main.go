@@ -28,6 +28,7 @@ const (
 	msgTypeReady          = "ready"                // inform remote that we are ready for a prompt
 	msgTypePrompt         = "prompt"               // remote is sending a prompt message
 	msgTypeQuit           = "quit"                 // remote is sending a quit message
+	msgTypeClear          = "clear"                // remote is sending a clear sesssion message
 	msgTypeChunk          = "chunk"                // a chunk in a streaming response to remote
 	msgTypeConfirm        = "confirm-tool-run"     // ask remote for permission to run a tool
 	msgTypeAllow          = "allow-tool-run"       // remote gives permission to run tool
@@ -139,6 +140,8 @@ func chatLoop(ctx context.Context, host *sdk.MCPHost) error {
 		switch msg.MsgType {
 		case msgTypeQuit:
 			return nil
+		case msgTypeClear:
+			host.ClearSession()
 		case msgTypePrompt:
 			err = handlePrompt(ctx, msg.Content, host, scanner)
 			if err != nil {
